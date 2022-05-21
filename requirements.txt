@@ -2,3 +2,5 @@ fastapi
 pydantic
 uvicorn
 python-dotenv
+pyqt5
+pyqt-tools

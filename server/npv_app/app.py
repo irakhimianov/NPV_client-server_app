@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from . import schemas, services
 
+
 app = FastAPI()
 
 
