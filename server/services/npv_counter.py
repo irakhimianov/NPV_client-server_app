@@ -1,5 +1,5 @@
 from datetime import datetime
-from npv_app.schemas import NPVSchema
+from schemas import NPVSchema
 
 
 def npv_counter(year: int, discount_rate: float, income: float, expense: float, prev_NPV: float=0) -> float:
@@ -12,7 +12,6 @@ def get_npv_list(npv: NPVSchema) -> list[float]:
     years_amount = npv.year - datetime.now().year + 1
     for i in range(1, years_amount + 1):
         prev_NPV = 0 if i == 1 else res[i - 2]
-        # print(f"{prev_NPV=}\n{res=}")
         res.append(npv_counter(year=i,
                                discount_rate=npv.discount_rate,
                                income=npv.income,
