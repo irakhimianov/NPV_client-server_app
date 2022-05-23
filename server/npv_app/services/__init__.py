@@ -1,1 +1,1 @@
-from .npv_counter import npv_counter
+from .npv_counter import npv_counter, get_npv_list
