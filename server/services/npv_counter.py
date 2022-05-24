@@ -26,7 +26,12 @@ def get_npv_list(npv: NPVSchema) -> list:
     return res
 
 
-def npv_on_change(prev_info: list, year: int, income: float, expense: float, prev_NPV: float):
+def npv_on_change(prev_info: list, col: int, row: int, year: int, changed_val: float, prev_NPV: float):
+    for ind, val in enumerate(prev_info):
+        if ind == col:
+            prev_info[ind][row] = changed_val
+        prev_NPV = 0 if col == 0 else prev_info[ind - 1]['npv']
+        npv_count(prev_info[ind], prev_NPV)
     pass
 
 
