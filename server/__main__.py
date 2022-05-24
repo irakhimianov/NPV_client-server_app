@@ -1,8 +1,8 @@
 import uvicorn
-from .settings import settings
+from config import config
 
 
 uvicorn.run("server.app:app",
             reload=True,
-            host=settings.host,
-            port=settings.port)
+            host=config.host,
+            port=config.port)

@@ -7,7 +7,7 @@ from PyQt5.QtGui import QIcon, QRegExpValidator
 from PyQt5.QtWidgets import QDialog, QTableWidget, QTableWidgetItem, QStatusBar, QMessageBox, QLineEdit
 from main_window import Ui_MainWindow
 from datetime import datetime
-from settings import settings
+from config import config
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -25,13 +25,13 @@ class MainWindow(QtWidgets.QMainWindow):
 
     def init_ui(self):
         self.setWindowTitle('NPV counter')
+        self.setWindowIcon(QIcon('./icon'))
         self.setFixedSize(800, 370)
-        self.ui.btn_close.clicked.connect(self.on_close)
+        self.set_table_headers()
         self.ui.input_host.setPlaceholderText('127.0.0.1')
         self.ui.input_port.setPlaceholderText('8080')
         self.ui.input_year.setPlaceholderText('2036')
         self.ui.input_discount_rate.setPlaceholderText('0.2')
-        self.ui.btn_count.clicked.connect(self.npv_count)
         self.statusBar().showMessage('🔴 Ответ от сервера отсутсвует')
         self.ui.input_host.setText(self.get_server_info()[0])
         self.ui.input_port.setText(self.get_server_info()[1])
@@ -39,8 +39,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.input_port.setValidator(self.num_only_validator)
         self.ui.input_year.setValidator(self.num_only_validator)
         self.ui.input_discount_rate.setValidator(self.float_num_validator)
+        self.ui.btn_count.clicked.connect(self.npv_count)
         self.ui.btn_clear.clicked.connect(self.on_clear)
-        self.set_table_headers()
+        self.ui.btn_close.clicked.connect(self.on_close)
 
 
     def set_table_headers(self):
@@ -54,6 +55,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def npv_count(self):
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Critical)
+        msg.setWindowIcon(QIcon('./icon'))
         try:
             year = str(datetime.now().year)
             input_year = int(self.ui.input_year.text())
@@ -68,27 +70,39 @@ class MainWindow(QtWidgets.QMainWindow):
 
             if response:
                 self.statusBar().showMessage('🟢 Ответ от сервера получен')
-            self.ui.tableWidget.setColumnCount(len(response))
+                self.ui.tableWidget.setColumnCount(len(response))
             for col, val in enumerate(response):
-                self.ui.tableWidget.setItem(0, col, QTableWidgetItem(year))
-                self.ui.tableWidget.setItem(1, col, QTableWidgetItem('1000'))
-                self.ui.tableWidget.setItem(2, col, QTableWidgetItem('500'))
-                self.ui.tableWidget.setItem(3, col, QTableWidgetItem(str(response[col])))
+                item_year = QTableWidgetItem(year)
+                self.ui.tableWidget.setItem(0, col, item_year)
+                item_year.setTextAlignment(Qt.AlignCenter)
+
+                item_income = QTableWidgetItem('1000')
+                self.ui.tableWidget.setItem(1, col, item_income)
+                item_income.setTextAlignment(Qt.AlignCenter)
+
+                item_expense = QTableWidgetItem('500')
+                self.ui.tableWidget.setItem(2, col, item_expense)
+                item_expense.setTextAlignment(Qt.AlignCenter)
+
+                item_npv = QTableWidgetItem(f'{response[col]:.3f}')
+                self.ui.tableWidget.setItem(3, col, item_npv)
+                item_npv.setTextAlignment(Qt.AlignCenter)
                 year = str(int(year) + 1)
+
         except ValueError:
-            self.msg.setText('Ошибка ввода данных')
-            self.msg.setInformativeText('Некорректные данные или незаполнены обязательные поля для ввода')
-            self.msg.setWindowTitle('Ошибка')
-            self.msg.exec_()
+            msg.setText('Ошибка ввода данных')
+            msg.setInformativeText('Некорректные данные или незаполнены обязательные поля для ввода')
+            msg.setWindowTitle('Ошибка')
+            msg.exec_()
         except (ConnectionRefusedError, ConnectionError):
-            self.msg.setText('Ошибка подключения к серверу')
-            self.msg.setInformativeText('Проверьте корректность ввода данных подключения к серверу')
-            self.msg.setWindowTitle('Ошибка')
-            self.msg.exec_()
+            msg.setText('Ошибка подключения к серверу')
+            msg.setInformativeText('Проверьте корректность ввода данных подключения к серверу')
+            msg.setWindowTitle('Ошибка')
+            msg.exec_()
 
 
     def get_server_info(self) -> tuple[str]:
-        return (str(settings.host), str(settings.port))
+        return (str(config.host), str(config.port))
 
 
     def on_clear(self) -> None:

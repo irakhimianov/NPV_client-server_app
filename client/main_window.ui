@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>800</width>
-    <height>370</height>
+    <height>380</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,19 +19,19 @@
   <property name="minimumSize">
    <size>
     <width>800</width>
-    <height>370</height>
+    <height>380</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>800</width>
-    <height>370</height>
+    <height>380</height>
    </size>
   </property>
   <property name="baseSize">
    <size>
     <width>800</width>
-    <height>370</height>
+    <height>380</height>
    </size>
   </property>
   <property name="font">
@@ -108,9 +108,9 @@ QHeaderView::section {
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>150</y>
+      <y>130</y>
       <width>780</width>
-      <height>151</height>
+      <height>181</height>
      </rect>
     </property>
     <property name="frameShape">
@@ -141,7 +141,7 @@ QHeaderView::section {
       <x>10</x>
       <y>90</y>
       <width>520</width>
-      <height>61</height>
+      <height>41</height>
      </rect>
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
@@ -234,7 +234,7 @@ QHeaderView::section {
     <property name="geometry">
      <rect>
       <x>700</x>
-      <y>310</y>
+      <y>320</y>
       <width>85</width>
       <height>30</height>
      </rect>
@@ -361,7 +361,7 @@ QHeaderView::section {
     <property name="geometry">
      <rect>
       <x>600</x>
-      <y>310</y>
+      <y>320</y>
       <width>85</width>
       <height>30</height>
      </rect>

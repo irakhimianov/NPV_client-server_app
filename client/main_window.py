@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'D:\Projects\BashNipiNeft\client\main_window.ui'
+# Form implementation generated from reading ui file 'd:\Projects\BashNipiNeft\client\main_window.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -14,15 +14,15 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.resize(800, 370)
+        MainWindow.resize(800, 380)
         sizePolicy = QtWidgets.QSizePolicy(QtWidgets.QSizePolicy.Fixed, QtWidgets.QSizePolicy.Fixed)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(MainWindow.sizePolicy().hasHeightForWidth())
         MainWindow.setSizePolicy(sizePolicy)
-        MainWindow.setMinimumSize(QtCore.QSize(800, 370))
-        MainWindow.setMaximumSize(QtCore.QSize(800, 370))
-        MainWindow.setBaseSize(QtCore.QSize(800, 370))
+        MainWindow.setMinimumSize(QtCore.QSize(800, 380))
+        MainWindow.setMaximumSize(QtCore.QSize(800, 380))
+        MainWindow.setBaseSize(QtCore.QSize(800, 380))
         font = QtGui.QFont()
         font.setFamily("Roboto,sans-serif")
         font.setPointSize(11)
@@ -82,7 +82,7 @@ class Ui_MainWindow(object):
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.tableWidget = QtWidgets.QTableWidget(self.centralwidget)
-        self.tableWidget.setGeometry(QtCore.QRect(10, 150, 780, 151))
+        self.tableWidget.setGeometry(QtCore.QRect(10, 130, 780, 181))
         self.tableWidget.setFrameShape(QtWidgets.QFrame.Box)
         self.tableWidget.setLineWidth(2)
         self.tableWidget.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
@@ -93,7 +93,7 @@ class Ui_MainWindow(object):
         self.tableWidget.setObjectName("tableWidget")
         self.tableWidget.setColumnCount(0)
         self.horizontalLayoutWidget = QtWidgets.QWidget(self.centralwidget)
-        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(10, 90, 520, 61))
+        self.horizontalLayoutWidget.setGeometry(QtCore.QRect(10, 90, 520, 41))
         self.horizontalLayoutWidget.setObjectName("horizontalLayoutWidget")
         self.horizontalLayout = QtWidgets.QHBoxLayout(self.horizontalLayoutWidget)
         self.horizontalLayout.setContentsMargins(0, 0, 0, 0)
@@ -126,7 +126,7 @@ class Ui_MainWindow(object):
         self.btn_count.setObjectName("btn_count")
         self.horizontalLayout.addWidget(self.btn_count)
         self.btn_close = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_close.setGeometry(QtCore.QRect(700, 310, 85, 30))
+        self.btn_close.setGeometry(QtCore.QRect(700, 320, 85, 30))
         self.btn_close.setMinimumSize(QtCore.QSize(85, 30))
         self.btn_close.setMaximumSize(QtCore.QSize(85, 30))
         self.btn_close.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
@@ -167,7 +167,7 @@ class Ui_MainWindow(object):
         self.line.setFrameShadow(QtWidgets.QFrame.Sunken)
         self.line.setObjectName("line")
         self.btn_clear = QtWidgets.QPushButton(self.centralwidget)
-        self.btn_clear.setGeometry(QtCore.QRect(600, 310, 85, 30))
+        self.btn_clear.setGeometry(QtCore.QRect(600, 320, 85, 30))
         self.btn_clear.setMinimumSize(QtCore.QSize(85, 30))
         self.btn_clear.setMaximumSize(QtCore.QSize(85, 30))
         self.btn_clear.setCursor(QtGui.QCursor(QtCore.Qt.PointingHandCursor))
