@@ -42,20 +42,43 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.btn_count.clicked.connect(self.npv_count)
         self.ui.btn_clear.clicked.connect(self.on_clear)
         self.ui.btn_close.clicked.connect(self.on_close)
-        # self.ui.tableWidget.itemEntered.connect(self.on_cell_change)
 
 
     def on_cell_change(self, item):
-        print(item.text())
-        print(f'{item.column()=}, {item.row()=}')
+        all_items = []
+        changed_info = (item.column(), item.row())
+        print(f'at {changed_info=}  {item.text()=}')
+        # print(item.text())
+        # print(self.ui.tableWidget.columnCount())
+        # print(self.ui.tableWidget.rowCount())
+        for i_col in range(self.ui.tableWidget.columnCount()):
+            row_items = {}
+            for j_row in range(self.ui.tableWidget.rowCount()):
+                row_items.update({j_row: self.ui.tableWidget.item(j_row, i_col).text()})
+            all_items.append(row_items)
+
+        prev_NPV = 0 if changed_info[0] == 0 else all_items[changed_info[0] - 1][4]
+        print(prev_NPV)
+        print(all_items[changed_info[0]])
+
+        # print(item.text())
+        # print(f'{item.column()=}, {item.row()=}')
         # if item.row() in (1, 2):
         #     print(item.text())
+        url = f'http://{self.ui.input_host.text()}:{self.ui.input_port.text()}/npv'
+        r = requests.post(url, json={'year': datetime.now().year + int(all_items[changed_info[0]][0]),
+                                     'discount_rate': float(all_items[changed_info[0]][1]),
+                                     'income': float(all_items[changed_info[0]][2]),
+                                     'expense': float(all_items[changed_info[0]][3]),
+                                     'prev_NPV': float(all_items[changed_info[0]][4])})
+        response = r.json()
+        print(response)
 
 
     def set_table_headers(self):
-        self.ui.tableWidget.setRowCount(4)
+        self.ui.tableWidget.setRowCount(5)
         self.ui.tableWidget.setColumnCount(0)
-        for row, val in enumerate(["Год", "Доход", "Расход", "NPV"]):
+        for row, val in enumerate(["Год", "Ставка", "Доход", "Расход", "NPV"]):
             item = QtWidgets.QTableWidgetItem(val)
             self.ui.tableWidget.setVerticalHeaderItem(row, item)
 
@@ -79,23 +102,15 @@ class MainWindow(QtWidgets.QMainWindow):
             if response:
                 self.statusBar().showMessage('🟢 Ответ от сервера получен')
                 self.ui.tableWidget.setColumnCount(len(response))
-            for col, val in enumerate(response):
-                item_year = QTableWidgetItem(year)
-                self.ui.tableWidget.setItem(0, col, item_year)
-                item_year.setTextAlignment(Qt.AlignCenter)
 
-                item_income = QTableWidgetItem('1000')
-                self.ui.tableWidget.setItem(1, col, item_income)
-                item_income.setTextAlignment(Qt.AlignCenter)
+            for col_index, col_items in enumerate(response):
+                for row_index, row_item in enumerate(col_items):
+                    item = QTableWidgetItem(str(col_items[row_item]))
+                    self.ui.tableWidget.setItem(row_index, col_index, item)
+                    item.setTextAlignment(Qt.AlignCenter)
+                    if row_index not in (2, 3):
+                        item.setFlags(QtCore.Qt.ItemIsEnabled)
 
-                item_expense = QTableWidgetItem('500')
-                self.ui.tableWidget.setItem(2, col, item_expense)
-                item_expense.setTextAlignment(Qt.AlignCenter)
-
-                item_npv = QTableWidgetItem(f'{response[col]:.3f}')
-                self.ui.tableWidget.setItem(3, col, item_npv)
-                item_npv.setTextAlignment(Qt.AlignCenter)
-                year = str(int(year) + 1)
             self.ui.tableWidget.itemChanged.connect(self.on_cell_change)
 
         except ValueError:
