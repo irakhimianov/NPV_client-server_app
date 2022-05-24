@@ -42,6 +42,14 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.btn_count.clicked.connect(self.npv_count)
         self.ui.btn_clear.clicked.connect(self.on_clear)
         self.ui.btn_close.clicked.connect(self.on_close)
+        # self.ui.tableWidget.itemEntered.connect(self.on_cell_change)
+
+
+    def on_cell_change(self, item):
+        print(item.text())
+        print(f'{item.column()=}, {item.row()=}')
+        # if item.row() in (1, 2):
+        #     print(item.text())
 
 
     def set_table_headers(self):
@@ -88,6 +96,7 @@ class MainWindow(QtWidgets.QMainWindow):
                 self.ui.tableWidget.setItem(3, col, item_npv)
                 item_npv.setTextAlignment(Qt.AlignCenter)
                 year = str(int(year) + 1)
+            self.ui.tableWidget.itemChanged.connect(self.on_cell_change)
 
         except ValueError:
             msg.setText('Ошибка ввода данных')
