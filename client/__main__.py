@@ -91,14 +91,15 @@ class MainWindow(QtWidgets.QMainWindow):
             year = str(datetime.now().year)
             input_year = int(self.ui.input_year.text())
             input_discount_rate = float(self.ui.input_discount_rate.text())
-            url = f'http://{self.ui.input_host.text()}:{self.ui.input_port.text()}/npv'
-            r = requests.post(url, json={'year': input_year,
-                                         'discount_rate': input_discount_rate,
-                                         'income': 1000,
-                                         'expense': 500,
-                                         'prev_NPV': 0})
-            response = r.json()
-
+            # url = f'http://{self.ui.input_host.text()}:{self.ui.input_port.text()}/npv'
+            # r = requests.post(url, json={'year': input_year,
+            #                              'discount_rate': input_discount_rate,
+            #                              'income': 1000,
+            #                              'expense': 500,
+            #                              'prev_NPV': 0})
+            # response = r.json()
+            #
+            response = [{'year': 1, 'discount_rate': 0.2, 'income': 1000.0, 'expense': 500.0, 'npv': 416.6666666666667}, {'year': 2, 'discount_rate': 0.2, 'income': 1000.0, 'expense': 500.0, 'npv': 763.8888888888889}, {'year': 3, 'discount_rate': 0.2, 'income': 1000.0, 'expense': 500.0, 'npv': 1053.2407407407409}, {'year': 4, 'discount_rate': 0.2, 'income': 1000.0, 'expense': 500.0, 'npv': 1294.3672839506175}]
             if response:
                 self.statusBar().showMessage('🟢 Ответ от сервера получен')
                 self.ui.tableWidget.setColumnCount(len(response))
