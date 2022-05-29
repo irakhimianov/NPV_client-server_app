@@ -5,11 +5,11 @@ from .npv_counter import npv_counter
 def npv_list_on_change(npv_list: list, col_changed: int, income: float, expense: float) -> list:
     res = npv_list[:col_changed]
     prev_NPV = 0 if col_changed == 0 else float(res[col_changed - 1]['npv'])
-    new_npv_amount = npv_counter(year=col_changed + 1,
-                                 discount_rate=float(npv_list[col_changed]['discount_rate']),
-                                 income=income,
-                                 expense=expense,
-                                 prev_NPV=prev_NPV)
+    new_npv_amount = round(npv_counter(year=col_changed + 1,
+                                       discount_rate=float(npv_list[col_changed]['discount_rate']),
+                                       income=income,
+                                       expense=expense,
+                                       prev_NPV=prev_NPV), 3)
 
     res.append({'year': col_changed + 1,
                 'discount_rate': float(npv_list[col_changed]['discount_rate']),
@@ -28,17 +28,5 @@ def npv_list_on_change(npv_list: list, col_changed: int, income: float, expense:
                     'discount_rate': npv_list[i]['discount_rate'],
                     'income': npv_list[i]['income'],
                     'expense': npv_list[i]['expense'],
-                    'npv': npv_amount})
+                    'npv': round(npv_amount, 3)})
     return res
-
-#
-# npv = NPVSchema(year=2025,
-#                 discount_rate=0.2,
-#                 income=1000,
-#                 expense=500,
-#                 prev_NPV=0)
-#
-# npv_list = get_npv_list(npv)
-# print(npv_list)
-# x = npv_list_on_change(npv_list, 0, 1000, 300)
-# print(npv_list_on_change(x, 2, 1000, 300))

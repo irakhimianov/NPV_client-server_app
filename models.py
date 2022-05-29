@@ -11,6 +11,5 @@ class NPVSchema(BaseModel):
     # Расход
     expense: float = 0.0
     # Чистый денежный поток
-    # net_cash_flow: float = 0.0
     # Предыдущий показатель NPV
     prev_NPV: float = 0.0

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-# Form implementation generated from reading ui file 'd:\Projects\BashNipiNeft\client\main_window.ui'
+# Form implementation generated from reading ui file 'D:\Projects\BashNipiNeft\client\main_window.ui'
 #
 # Created by: PyQt5 UI code generator 5.15.6
 #
@@ -184,6 +184,9 @@ class Ui_MainWindow(object):
 "    color: #fff;\n"
 "}")
         self.btn_clear.setObjectName("btn_clear")
+        self.label_6 = QtWidgets.QLabel(self.centralwidget)
+        self.label_6.setGeometry(QtCore.QRect(30, 320, 151, 16))
+        self.label_6.setObjectName("label_6")
         MainWindow.setCentralWidget(self.centralwidget)
         self.statusBar = QtWidgets.QStatusBar(MainWindow)
         self.statusBar.setSizeGripEnabled(False)
@@ -204,6 +207,7 @@ class Ui_MainWindow(object):
         self.label_5.setText(_translate("MainWindow", "port:"))
         self.label.setText(_translate("MainWindow", "Настройки сервера:"))
         self.btn_clear.setText(_translate("MainWindow", "Очистить"))
+        self.label_6.setText(_translate("MainWindow", "* изменяемые поля"))
 
 
 if __name__ == "__main__":

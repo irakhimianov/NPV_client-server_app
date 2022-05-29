@@ -17,4 +17,3 @@ def npv_on_change(npv_list: list, col_changed: int, income: float, expense: floa
                                        col_changed=col_changed,
                                        income=income,
                                        expense=expense)
-    return 'hi'
