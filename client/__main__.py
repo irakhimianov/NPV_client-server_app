@@ -1,4 +1,4 @@
-import sys
+import os, sys
 import requests
 from datetime import datetime
 from PyQt5 import QtCore, QtWidgets
@@ -6,8 +6,13 @@ from PyQt5.QtCore import Qt, QRegExp
 from PyQt5.QtGui import QIcon, QRegExpValidator
 from PyQt5.QtWidgets import QTableWidgetItem, QMessageBox, QLineEdit
 from requests import ConnectionError
+from src import Ui_MainWindow
+
+
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
 from config import config
-from main_window import Ui_MainWindow
 
 
 class MainWindow(QtWidgets.QMainWindow):
@@ -25,9 +30,9 @@ class MainWindow(QtWidgets.QMainWindow):
         self.init_ui()
 
 
-    def init_ui(self):
+    def init_ui(self) -> None:
         self.setWindowTitle('NPV counter')
-        self.setWindowIcon(QIcon('./icon'))
+        self.setWindowIcon(QIcon('src/icon'))
         self.setFixedSize(800, 370)
         self.set_table_headers()
         self.ui.tableWidget.horizontalHeader().hide()
@@ -47,7 +52,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.btn_close.clicked.connect(self.on_close)
 
 
-    def set_table_headers(self):
+    def set_table_headers(self) -> None:
         self.ui.tableWidget.setRowCount(5)
         self.ui.tableWidget.setColumnCount(0)
         for row, val in enumerate(self.TABLE_HEADER_NAMES):
@@ -55,7 +60,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.ui.tableWidget.setVerticalHeaderItem(row, item)
 
 
-    def set_table_items(self, items: list):
+    def set_table_items(self, items: list) -> None:
         for col_index, col_items in enumerate(items):
             for row_index, row_item in enumerate(col_items):
                 item = QTableWidgetItem(str(col_items[row_item]))
@@ -66,7 +71,7 @@ class MainWindow(QtWidgets.QMainWindow):
         self.ui.tableWidget.itemChanged.connect(self.on_cell_change)
 
 
-    def npv_count(self):
+    def npv_count(self) -> None:
         try:
             self.ui.tableWidget.itemChanged.disconnect()
         except:
@@ -93,7 +98,7 @@ class MainWindow(QtWidgets.QMainWindow):
             self.on_error(e)
 
 
-    def on_cell_change(self, item: QTableWidgetItem):
+    def on_cell_change(self, item: QTableWidgetItem) -> None:
         self.ui.tableWidget.itemChanged.disconnect()
         all_items = []
         url = f'http://{self.ui.input_host.text()}:{self.ui.input_port.text()}/npv_on_change'
@@ -127,7 +132,10 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
     def get_server_info(self) -> tuple[str]:
-        return (str(config.host), str(config.port))
+        try:
+            return (str(config.host), str(config.port))
+        except:
+            return ('127.0.0.1', '8080')
 
 
     def on_clear(self) -> None:
@@ -144,7 +152,7 @@ class MainWindow(QtWidgets.QMainWindow):
     def on_error(self, error: Exception) -> None:
         msg = QMessageBox()
         msg.setIcon(QMessageBox.Critical)
-        msg.setWindowIcon(QIcon('./icon'))
+        msg.setWindowIcon(QIcon('src/icon'))
         msg.setWindowTitle('Ошибка')
         if isinstance(error, ValueError):
             msg.setText('Ошибка ввода данных')
