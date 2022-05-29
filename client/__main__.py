@@ -14,6 +14,7 @@ class MainWindow(QtWidgets.QMainWindow):
     num_only_validator = QRegExpValidator(QRegExp(r'[0-9]+'))
     float_num_validator = QRegExpValidator(QRegExp(r'(?:\d+(?:\.\d*)?|\.\d+)(?:[eE][-+]?\d+)?'))
     num_with_dot_validator = QRegExpValidator(QRegExp(r'([0-9]+\.?)+'))
+    xxx = ['year', 'discount_rate', 'income', 'expense', 'npv']
 
 
     def __init__(self):
@@ -45,34 +46,45 @@ class MainWindow(QtWidgets.QMainWindow):
 
 
     def on_cell_change(self, item):
+        self.ui.tableWidget.itemChanged.disconnect()
+
         all_items = []
-        changed_info = (item.column(), item.row())
-        print(f'at {changed_info=}  {item.text()=}')
-        # print(item.text())
-        # print(self.ui.tableWidget.columnCount())
-        # print(self.ui.tableWidget.rowCount())
         for i_col in range(self.ui.tableWidget.columnCount()):
             row_items = {}
             for j_row in range(self.ui.tableWidget.rowCount()):
-                row_items.update({j_row: self.ui.tableWidget.item(j_row, i_col).text()})
+                row_items.update({self.xxx[j_row]: self.ui.tableWidget.item(j_row, i_col).text()})
             all_items.append(row_items)
 
-        prev_NPV = 0 if changed_info[0] == 0 else all_items[changed_info[0] - 1][4]
-        print(prev_NPV)
-        print(all_items[changed_info[0]])
+        url = f'http://{self.ui.input_host.text()}:{self.ui.input_port.text()}/npv_on_change'
+        if item.row() == 2:
+            print(f'if {item.row()=}')
+            r_json = {'col_changed': item.column(),
+                      'income': float(item.text()),
+                      'expense': float(all_items[item.column()]['expense'])}
+        else:
+            print(f'if {item.row()=}')
+            r_json = {'col_changed': item.column(),
+                      'income': float(all_items[item.column()]['income']),
+                      'expense': float(item.text())}
 
-        # print(item.text())
-        # print(f'{item.column()=}, {item.row()=}')
-        # if item.row() in (1, 2):
-        #     print(item.text())
-        url = f'http://{self.ui.input_host.text()}:{self.ui.input_port.text()}/npv'
-        r = requests.post(url, json={'year': datetime.now().year + int(all_items[changed_info[0]][0]),
-                                     'discount_rate': float(all_items[changed_info[0]][1]),
-                                     'income': float(all_items[changed_info[0]][2]),
-                                     'expense': float(all_items[changed_info[0]][3]),
-                                     'prev_NPV': float(all_items[changed_info[0]][4])})
+        r = requests.post(url, params=r_json, json=all_items)
         response = r.json()
         print(response)
+        response = r.json()
+
+        if response:
+            self.statusBar().showMessage('🟢 Ответ от сервера получен')
+            self.ui.tableWidget.setColumnCount(len(response))
+
+        for col_index, col_items in enumerate(response):
+            for row_index, row_item in enumerate(col_items):
+                item = QTableWidgetItem(str(col_items[row_item]))
+                self.ui.tableWidget.setItem(row_index, col_index, item)
+                item.setTextAlignment(Qt.AlignCenter)
+                if row_index not in (2, 3):
+                    item.setFlags(QtCore.Qt.ItemIsEnabled)
+
+        self.ui.tableWidget.itemChanged.connect(self.on_cell_change)
 
 
     def set_table_headers(self):
@@ -91,15 +103,14 @@ class MainWindow(QtWidgets.QMainWindow):
             year = str(datetime.now().year)
             input_year = int(self.ui.input_year.text())
             input_discount_rate = float(self.ui.input_discount_rate.text())
-            # url = f'http://{self.ui.input_host.text()}:{self.ui.input_port.text()}/npv'
-            # r = requests.post(url, json={'year': input_year,
-            #                              'discount_rate': input_discount_rate,
-            #                              'income': 1000,
-            #                              'expense': 500,
-            #                              'prev_NPV': 0})
-            # response = r.json()
-            #
-            response = [{'year': 1, 'discount_rate': 0.2, 'income': 1000.0, 'expense': 500.0, 'npv': 416.6666666666667}, {'year': 2, 'discount_rate': 0.2, 'income': 1000.0, 'expense': 500.0, 'npv': 763.8888888888889}, {'year': 3, 'discount_rate': 0.2, 'income': 1000.0, 'expense': 500.0, 'npv': 1053.2407407407409}, {'year': 4, 'discount_rate': 0.2, 'income': 1000.0, 'expense': 500.0, 'npv': 1294.3672839506175}]
+            url = f'http://{self.ui.input_host.text()}:{self.ui.input_port.text()}/npv'
+            r = requests.post(url, json={'year': input_year,
+                                         'discount_rate': input_discount_rate,
+                                         'income': 1000,
+                                         'expense': 500,
+                                         'prev_NPV': 0})
+            response = r.json()
+
             if response:
                 self.statusBar().showMessage('🟢 Ответ от сервера получен')
                 self.ui.tableWidget.setColumnCount(len(response))
@@ -113,6 +124,7 @@ class MainWindow(QtWidgets.QMainWindow):
                         item.setFlags(QtCore.Qt.ItemIsEnabled)
 
             self.ui.tableWidget.itemChanged.connect(self.on_cell_change)
+
 
         except ValueError:
             msg.setText('Ошибка ввода данных')
