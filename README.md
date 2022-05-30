@@ -18,7 +18,7 @@
   python -m pip install -r requirements.txt
 ```
 
-##Запуск сервера
+## Запуск сервера
 ```console
   python /server/__main__.py
 ```
